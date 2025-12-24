@@ -16,8 +16,7 @@ label{display:block;margin-top:10px;font-weight:600;}
 input,select{width:100%;padding:10px;margin-bottom:15px;border-radius:6px;border:1px solid #ccc;}
 button{width:100%;padding:12px;background:linear-gradient(90deg,#1e88e5,#1565c0);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;transition:0.3s;}
 button:hover{background:linear-gradient(90deg,#1565c0,#1e88e5);}
-.result{display:none;margin-top:20px;padding:20px;border-radius:10px;background:#e3f2fd;text-align:left;}
-.result p{margin:5px 0;}
+.result{display:none;margin-top:20px;padding:20px;border-radius:10px;background:#e3f2fd;white-space:pre-line;}
 @media(max-width:600px){header{flex-direction:column;align-items:flex-start;padding:10px 20px;}header h1{font-size:1.4rem;margin-bottom:8px;}nav a{margin-left:0;margin-top:6px;}main{margin-top:160px;}}
 </style>
 </head>
@@ -62,36 +61,38 @@ button:hover{background:linear-gradient(90deg,#1565c0,#1e88e5);}
 
 <script>
 document.getElementById('calcForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  const age = +document.getElementById('age').value;
-  const height = +document.getElementById('height').value;
-  const weight = +document.getElementById('weight').value;
-  const sex = document.getElementById('sex').value;
-  const activity = +document.getElementById('activity').value;
-  const goal = document.getElementById('goal').value;
+    e.preventDefault();
 
-  if(!weight || !height || !age) return;
+    var age = Number(document.getElementById('age').value);
+    var height = Number(document.getElementById('height').value);
+    var weight = Number(document.getElementById('weight').value);
+    var sex = document.getElementById('sex').value;
+    var activity = Number(document.getElementById('activity').value);
+    var goal = document.getElementById('goal').value;
 
-  let bmr = (sex==='м'? 10*weight + 6.25*height - 5*age +5 : 10*weight + 6.25*height -5*age -161);
-  let tdee = bmr * [1.2,1.375,1.55,1.725,1.9][activity-1] * (goal==='похудение'?0.85:(goal==='набор'?1.10:1));
+    if(!weight || !height || !age) return;
 
-  let protein = Math.round(weight*1.8);
-  let fat = Math.round(weight*0.8);
-  let carbs = Math.round((tdee - (protein*4 + fat*9))/4);
+    var bmr = (sex==='м'? 10*weight + 6.25*height - 5*age +5 : 10*weight + 6.25*height -5*age -161);
+    var tdee = bmr * [1.2,1.375,1.55,1.725,1.9][activity-1] * (goal==='похудение'?0.85:(goal==='набор'?1.10:1));
 
-  let slowCarbs = Math.round(carbs*0.65);
-  let simpleCarbs = carbs - slowCarbs;
-  let plantFat = Math.round(fat*0.65);
-  let animalFat = fat - plantFat;
+    var protein = Math.round(weight*1.8);
+    var fat = Math.round(weight*0.8);
+    var carbs = Math.round((tdee - (protein*4 + fat*9))/4);
 
-  const resDiv = document.getElementById('result');
-  resDiv.style.display='block';
-  resDiv.innerHTML = `
-    <p><strong>🔥 Суточная норма:</strong> ${Math.round(tdee)} ккал</p>
-    <p>🍗 Белки: ${protein} г</p>
-    <p>🥑 Жиры: ${fat} г (растительные: ${plantFat} г, животные: ${animalFat} г)</p>
-    <p>🍞 Углеводы: ${carbs} г (медленные: ${slowCarbs} г, простые: ${simpleCarbs} г)</p>
-  `;
+    var slowCarbs = Math.round(carbs*0.65);
+    var simpleCarbs = carbs - slowCarbs;
+    var plantFat = Math.round(fat*0.65);
+    var animalFat = fat - plantFat;
+
+    var output = "";
+    output += "🔥 Суточная норма: " + Math.round(tdee) + " ккал\n";
+    output += "🍗 Белки: " + protein + " г\n";
+    output += "🥑 Жиры: " + fat + " г (растительные: " + plantFat + " г, животные: " + animalFat + " г)\n";
+    output += "🍞 Углеводы: " + carbs + " г (медленные: " + slowCarbs + " г, простые: " + simpleCarbs + " г)";
+
+    var resDiv = document.getElementById('result');
+    resDiv.style.display = 'block';
+    resDiv.innerText = output;
 });
 </script>
 </body>
