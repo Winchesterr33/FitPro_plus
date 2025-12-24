@@ -59,14 +59,20 @@ document.getElementById('strengthForm').addEventListener('submit', function(e){
     const reps = +document.getElementById('reps').value;
     if(!weight || !reps || reps<1) return;
 
-    // Универсальные формулы для 1ПМ
-    const epley = weight*(1+0.0333*reps);
-    const brzycki = weight*36/(37-reps);
+    let k; // коэффициент для формулы Эпли
+    switch(exercise){
+        case 'bench': k=0.0333; break;
+        case 'deadlift': k=0.03; break;
+        case 'squat': k=0.032; break;
+    }
+
+    // Формулы 1ПМ
+    const epley = weight*(1 + k*reps);
+    const brzycki = weight*36/(37-reps); // можно оставить одинаковой для всех
     const lombardi = weight*Math.pow(reps,0.10);
     const mayhew = 100*weight/(52.2+41.9*Math.exp(-0.055*reps));
     const oconner = weight*(1+0.025*reps);
 
-    // Среднее арифметическое
     const avg = (epley+brzycki+lombardi+mayhew+oconner)/5;
 
     const exerciseName = exercise === 'bench' ? 'Жим лёжа' :
