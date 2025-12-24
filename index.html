@@ -2,45 +2,53 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trenova+</title>
-  <style>
-    body { font-family: Arial, sans-serif; background:#f9f9f9; margin:0; color:#333; }
-    header { background:#4CAF50; color:white; text-align:center; padding:25px; }
-    nav { text-align:center; margin:20px; }
-    a {
-      margin: 10px;
-      padding: 10px 20px;
-      background:#4CAF50;
-      color:white;
-      text-decoration:none;
-      border-radius:6px;
-      transition:0.2s;
-    }
-    a:hover { background:#43a047; }
-    main { text-align:center; max-width:650px; margin:auto; padding:20px; }
-  </style>
+  <title>FitPro+</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Trenova+</h1>
-    <p>Научный подход к питанию и тренировкам</p>
-  </header>
 
-  <nav>
-    <a href="nutrition.html">🥗 Питание</a>
-    <a href="strength.html">🏋️ Сила</a>
-  </nav>
+<header>
+  <h1>FitPro+</h1>
+  <p>Персональный ИИ-помощник для тренировок и здоровья</p>
+</header>
 
-  <main>
-    <h2>Добро пожаловать в Trenova+</h2>
-    <p><strong>Trenova+</strong> — это платформа, объединяющая науку о питании и силовые методики.  
-       Составь свой рацион, рассчитай калораж и узнай, на что способен твой организм.</p>
-    <p>Выбери направление:</p>
-    <p>
-      <a href="nutrition.html">Перейти к питанию</a> |
-      <a href="strength.html">Перейти к тренировкам</a>
-    </p>
-  </main>
+<section class="about">
+  <h2>О продукте</h2>
+  <p>
+    FitPro+ — онлайн-сервис, который подбирает индивидуальные тренировки,
+    питание и мотивационную поддержку с помощью искусственного интеллекта.
+  </p>
+</section>
+
+<section class="form">
+  <h2>Персональный план</h2>
+
+  <label>Возраст</label>
+  <input type="number" id="age">
+
+  <label>Цель</label>
+  <select id="goal">
+    <option>Похудение</option>
+    <option>Набор мышц</option>
+    <option>Поддержание формы</option>
+  </select>
+
+  <label>Уровень подготовки</label>
+  <select id="level">
+    <option>Новичок</option>
+    <option>Средний</option>
+    <option>Продвинутый</option>
+  </select>
+
+  <button onclick="generatePlan()">Получить план</button>
+</section>
+
+<section class="result" id="result"></section>
+
+<footer>
+  <p>FitPro+ © 2025</p>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
