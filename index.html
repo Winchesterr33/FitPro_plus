@@ -5,85 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FitPro+</title>
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f0f4f8;
-    color: #333;
-}
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: #1e88e5;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    z-index: 1000;
-}
-header h1 {
-    margin: 0;
-    font-size: 1.6rem;
-    font-weight: bold;
-}
-nav a {
-    margin-left: 20px;
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 8px 15px;
-    border-radius: 5px;
-}
-nav a:hover {
-    background: rgba(255,255,255,0.2);
-}
-main {
-    max-width: 750px;
-    margin: 140px auto 50px auto;
-    padding: 0 15px;
-}
-.card {
-    background: white;
-    padding: 30px 20px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    text-align: center;
-}
-.card a {
-    display: inline-block;
-    margin: 15px 10px;
-    padding: 14px 28px;
-    background: #1e88e5;
-    color: white;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-}
-.card a:hover {
-    background: #1565c0;
-}
-@media(max-width:600px){
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 10px 20px;
-    }
-    header h1 {
-        font-size: 1.4rem;
-        margin-bottom: 8px;
-    }
-    nav a {
-        margin-left: 0;
-        margin-top: 6px;
-    }
-    main {
-        margin-top: 160px;
-    }
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f0f4f8;color:#333;}
+header{position:fixed;top:0;left:0;width:100%;background:#1e88e5;color:white;display:flex;justify-content:space-between;align-items:center;padding:15px 30px;box-shadow:0 4px 10px rgba(0,0,0,0.2);z-index:1000;}
+header h1{margin:0;font-size:1.6rem;font-weight:bold;}
+nav a{margin-left:20px;color:white;text-decoration:none;font-weight:600;padding:8px 15px;border-radius:5px;transition:0.3s;}
+nav a:hover{background: rgba(255,255,255,0.2);}
+main{max-width:750px;margin:140px auto 50px auto;padding:0 15px;text-align:center;}
+.card{background:white;padding:20px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.1);margin-bottom:20px;}
+.card img{width:100%;border-radius:15px;margin-bottom:15px;}
+.button{display:inline-block;margin:10px;padding:12px 25px;background:#1e88e5;color:white;border-radius:10px;text-decoration:none;font-weight:bold;transition:0.3s;}
+.button:hover{background:#1565c0;}
+@media(max-width:600px){header{flex-direction:column;align-items:flex-start;padding:10px 20px;}header h1{font-size:1.4rem;margin-bottom:8px;}nav a{margin-left:0;margin-top:6px;}main{margin-top:160px;}}
 </style>
 </head>
 <body>
@@ -91,18 +23,17 @@ main {
 <h1>FitPro+</h1>
 <nav>
 <a href="nutrition.html">🥗 Питание</a>
-<a href="strength.html">🏋️ Сила</a>
+<a href="strength.html">🏋️ Тренировки</a>
 </nav>
 </header>
 <main>
 <div class="card">
-<h2>Добро пожаловать в ФитПро+</h2>
-<p>Составить инвидуальынй план и расчитать максимальный вес в упражнениях</p>
-<a href="nutrition.html">Перейти к индивидуальному питанию</a>
-<a href="strength.html">Перейти к силомеру</a>
+<img src="images/fitness-banner.jpg" alt="Фитнес баннер">
+<h2>Добро пожаловать в FitPro+</h2>
+<p>Объединяем питание и силовые методики. Рассчитай калораж, БЖУ и максимальный жим лёжа.</p>
+<a href="nutrition.html" class="button">🥗 Питание</a>
+<a href="strength.html" class="button">🏋️ Тренировки</a>
 </div>
 </main>
 </body>
 </html>
-
-
