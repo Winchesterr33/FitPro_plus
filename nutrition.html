@@ -4,96 +4,168 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FitPro+ | Питание</title>
+
 <style>
-body{margin:0;font-family:'Arial',sans-serif;background:#f0f4f8;color:#333;}
-header{position:fixed;top:0;width:100%;background:#1e88e5;color:white;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,0.2);z-index:1000;}
-header h1{margin:0;font-size:1.6rem;}
-nav a{color:white;text-decoration:none;margin-left:20px;padding:8px 15px;border-radius:5px;font-weight:600;}
-nav a:hover{background: rgba(255,255,255,0.2);}
-main{max-width:750px;margin:140px auto 50px auto;padding:0 15px;display:flex;flex-direction:column;gap:20px;}
-.card{background:white;padding:30px 20px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.1);}
-label{display:block;margin-top:10px;font-weight:600;}
-input,select{width:100%;padding:10px;margin-bottom:15px;border-radius:6px;border:1px solid #ccc;}
-button{width:100%;padding:12px;background:linear-gradient(90deg,#1e88e5,#1565c0);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;transition:0.3s;}
-button:hover{background:linear-gradient(90deg,#1565c0,#1e88e5);}
-.result{display:none;margin-top:20px;padding:20px;border-radius:10px;background:#e3f2fd;white-space:pre-line;}
-@media(max-width:600px){header{flex-direction:column;align-items:flex-start;padding:10px 20px;}header h1{font-size:1.4rem;margin-bottom:8px;}nav a{margin-left:0;margin-top:6px;}main{margin-top:160px;}}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f0f4f8;
+  color: #333;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #1e88e5;
+  color: white;
+  padding: 15px 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+main {
+  max-width: 700px;
+  margin: 140px auto 40px;
+  padding: 0 15px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  background: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.result {
+  margin-top: 20px;
+  padding: 15px;
+  background: #e3f2fd;
+  border-radius: 10px;
+  white-space: pre-line;
+}
 </style>
 </head>
+
 <body>
+
 <header>
-<h1>FitPro+</h1>
-<nav>
-<a href="index.html">🏠 Главная</a>
-<a href="strength.html">🏋️ Тренировки</a>
-</nav>
+  <h2>FitPro+</h2>
 </header>
+
 <main>
-<h2>Калькулятор калорий и БЖУ</h2>
-<div class="card">
-<form id="calcForm">
-<label>Возраст:</label><input type="number" id="age" required>
-<label>Рост (см):</label><input type="number" id="height" required>
-<label>Вес (кг):</label><input type="number" id="weight" required>
-<label>Пол:</label>
-<select id="sex">
-<option value="м">Мужской</option>
-<option value="ж">Женский</option>
-</select>
-<label>Активность:</label>
-<select id="activity">
-<option value="1">Минимальная</option>
-<option value="2">Низкая</option>
-<option value="3">Средняя</option>
-<option value="4">Высокая</option>
-<option value="5">Очень высокая</option>
-</select>
-<label>Цель:</label>
-<select id="goal">
-<option value="поддержание">Поддержание веса</option>
-<option value="похудение">Похудение</option>
-<option value="набор">Набор массы</option>
-</select>
-<button type="submit">Рассчитать</button>
-</form>
-<div class="result" id="result"></div>
-</div>
+  <div class="card">
+    <form id="form">
+      <label>Возраст</label>
+      <input type="number" id="age">
+
+      <label>Рост (см)</label>
+      <input type="number" id="height">
+
+      <label>Вес (кг)</label>
+      <input type="number" id="weight">
+
+      <label>Пол</label>
+      <select id="sex">
+        <option value="m">Мужской</option>
+        <option value="f">Женский</option>
+      </select>
+
+      <label>Активность</label>
+      <select id="activity">
+        <option value="1">Минимальная</option>
+        <option value="2">Низкая</option>
+        <option value="3">Средняя</option>
+        <option value="4">Высокая</option>
+        <option value="5">Очень высокая</option>
+      </select>
+
+      <label>Цель</label>
+      <select id="goal">
+        <option value="keep">Поддержание</option>
+        <option value="cut">Похудение</option>
+        <option value="bulk">Набор</option>
+      </select>
+
+      <button type="submit">Рассчитать</button>
+    </form>
+
+    <div class="result" id="result"></div>
+  </div>
+</main>
 
 <script>
-document.getElementById('calcForm').addEventListener('submit', function(e){
-    e.preventDefault();
+document.getElementById("form").onsubmit = function(e) {
+  e.preventDefault();
 
-    var age = Number(document.getElementById('age').value);
-    var height = Number(document.getElementById('height').value);
-    var weight = Number(document.getElementById('weight').value);
-    var sex = document.getElementById('sex').value;
-    var activity = Number(document.getElementById('activity').value);
-    var goal = document.getElementById('goal').value;
+  var age = Number(document.getElementById("age").value);
+  var height = Number(document.getElementById("height").value);
+  var weight = Number(document.getElementById("weight").value);
+  var sex = document.getElementById("sex").value;
+  var activity = Number(document.getElementById("activity").value);
+  var goal = document.getElementById("goal").value;
 
-    if(!weight || !height || !age) return;
+  if (age <= 0 || height <= 0 || weight <= 0) return;
 
-    var bmr = (sex==='м'? 10*weight + 6.25*height - 5*age +5 : 10*weight + 6.25*height -5*age -161);
-    var tdee = bmr * [1.2,1.375,1.55,1.725,1.9][activity-1] * (goal==='похудение'?0.85:(goal==='набор'?1.10:1));
+  var bmr;
+  if (sex === "m") {
+    bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+  } else {
+    bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+  }
 
-    var protein = Math.round(weight*1.8);
-    var fat = Math.round(weight*0.8);
-    var carbs = Math.round((tdee - (protein*4 + fat*9))/4);
+  var coef = 1.2;
+  if (activity === 2) coef = 1.375;
+  if (activity === 3) coef = 1.55;
+  if (activity === 4) coef = 1.725;
+  if (activity === 5) coef = 1.9;
 
-    var slowCarbs = Math.round(carbs*0.65);
-    var simpleCarbs = carbs - slowCarbs;
-    var plantFat = Math.round(fat*0.65);
-    var animalFat = fat - plantFat;
+  var calories = bmr * coef;
 
-    var output = "";
-    output += "🔥 Суточная норма: " + Math.round(tdee) + " ккал\n";
-    output += "🍗 Белки: " + protein + " г\n";
-    output += "🥑 Жиры: " + fat + " г (растительные: " + plantFat + " г, животные: " + animalFat + " г)\n";
-    output += "🍞 Углеводы: " + carbs + " г (медленные: " + slowCarbs + " г, простые: " + simpleCarbs + " г)";
+  if (goal === "cut") calories = calories * 0.85;
+  if (goal === "bulk") calories = calories * 1.10;
 
-    var resDiv = document.getElementById('result');
-    resDiv.style.display = 'block';
-    resDiv.innerText = output;
-});
+  var protein = Math.round(weight * 1.8);
+  var fat = Math.round(weight * 0.8);
+  var carbs = Math.round((calories - protein * 4 - fat * 9) / 4);
+
+  var slowCarbs = Math.round(carbs * 0.65);
+  var fastCarbs = carbs - slowCarbs;
+
+  var plantFat = Math.round(fat * 0.65);
+  var animalFat = fat - plantFat;
+
+  var text = "";
+  text += "Суточные калории: " + Math.round(calories) + " ккал\n";
+  text += "Белки: " + protein + " г\n";
+  text += "Жиры: " + fat + " г (растительные " + plantFat + ", животные " + animalFat + ")\n";
+  text += "Углеводы: " + carbs + " г (медленные " + slowCarbs + ", простые " + fastCarbs + ")";
+
+  document.getElementById("result").innerText = text;
+};
 </script>
+
 </body>
 </html>
