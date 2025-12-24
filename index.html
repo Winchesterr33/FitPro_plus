@@ -3,43 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ФитПро+</title>
+<title>FitPro+ | Питание</title>
+
 <style>
-body{margin:0;font-family:'Arial',sans-serif;background:#f0f4f8;color:#333;}
-header{position:fixed;top:0;width:100%;background:#1e88e5;color:white;display:flex;justify-content:space-between;align-items:center;padding:15px 30px;box-shadow:0 4px 10px rgba(0,0,0,0.2);z-index:1000;}
-header h1{margin:0;font-size:1.6rem;font-weight:bold;}
-nav a{margin-left:20px;color:white;text-decoration:none;font-weight:600;padding:8px 15px;border-radius:5px;transition:0.3s;}
-nav a:hover{background: rgba(255,255,255,0.2);}
-main{max-width:750px;margin:140px auto 50px auto;padding:0 15px;display:flex;flex-direction:column;gap:20px;}
-.card{background:white;padding:30px 20px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.1);transition:0.3s;display:flex;flex-direction:column;align-items:center;}
-.card:hover{box-shadow:0 12px 30px rgba(0,0,0,0.15);}
-.card h2{color:#0d47a1;margin-bottom:15px;}
-.button{display:inline-block;margin:10px;padding:12px 25px;background:linear-gradient(90deg,#1e88e5,#1565c0);color:white;border-radius:10px;text-decoration:none;font-weight:bold;transition:0.3s;}
-.button:hover{background:linear-gradient(90deg,#1565c0,#1e88e5);}
-@media(max-width:600px){header{flex-direction:column;align-items:flex-start;padding:10px 20px;}header h1{font-size:1.4rem;margin-bottom:8px;}nav a{margin-left:0;margin-top:6px;}main{margin-top:160px;}}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f0f4f8;
+  color: #333;
+}
+
+/* ===== HEADER ===== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #1e88e5;
+  color: white;
+  padding: 15px 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 15px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: 0.25s;
+}
+
+nav a:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ===== MAIN ===== */
+main {
+  max-width: 720px;
+  margin: 140px auto 40px;
+  padding: 0 15px;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1565c0;
+}
+
+.result {
+  margin-top: 25px;
+  padding: 18px;
+  background: #e3f2fd;
+  border-radius: 12px;
+  white-space: pre-line;
+  font-weight: bold;
+}
 </style>
 </head>
+
 <body>
+
 <header>
-<h1>ФитПро+</h1>
-<nav>
-<a href="nutrition.html">🥗 Питание</a>
-<a href="strength.html">🏋️ Силомер</a>
-</nav>
+  <div class="header-inner">
+    <h2>FitPro+</h2>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="strength.html">Тренировки</a>
+    </nav>
+  </div>
 </header>
+
 <main>
-<div class="card">
-<h2>Добро пожаловать в ФитПро+</h2>
-<p>Сервис в разработке, на данном этапе доступно только 2 функции.</p>
-<a href="nutrition.html" class="button">🥗 Составить индивидуальный план питания</a>
-<a href="strength.html" class="button">🏋️ Силомер</a>
-</div>
+  <div class="card">
+    <form id="form">
+
+      <label>Возраст</label>
+      <input id="age" type="number">
+
+      <label>Рост (см)</label>
+      <input id="height" type="number">
+
+      <label>Вес (кг)</label>
+      <input id="weight" type="number">
+
+      <label>Пол</label>
+      <select id="sex">
+        <option value="m">Мужской</option>
+        <option value="f">Женский</option>
+      </select>
+
+      <label>Активность</label>
+      <select id="activity">
+        <option value="1">Минимальная</option>
+        <option value="2">Низкая</option>
+        <option value="3">Средняя</option>
+        <option value="4">Высокая</option>
+        <option value="5">Очень высокая</option>
+      </select>
+
+      <label>Цель</label>
+      <select id="goal">
+        <option value="keep">Поддержание</option>
+        <option value="cut">Похудение</option>
+        <option value="bulk">Набор массы</option>
+      </select>
+
+      <button type="submit">Рассчитать</button>
+    </form>
+
+    <div class="result" id="result"></div>
+  </div>
 </main>
+
+<script>
+document.getElementById("form").onsubmit = function(e) {
+  e.preventDefault();
+
+  var age = +document.getElementById("age").value;
+  var h = +document.getElementById("height").value;
+  var w = +document.getElementById("weight").value;
+
+  if (!age || !h || !w) return;
+
+  var sex = document.getElementById("sex").value;
+  var activity = document.getElementById("activity").value;
+  var goal = document.getElementById("goal").value;
+
+  var bmr = (sex === "m")
+    ? 10*w + 6.25*h - 5*age + 5
+    : 10*w + 6.25*h - 5*age - 161;
+
+  var factors = [1.2, 1.375, 1.55, 1.725, 1.9];
+  var calories = bmr * factors[activity - 1];
+
+  if (goal === "cut") calories *= 0.85;
+  if (goal === "bulk") calories *= 1.1;
+
+  var protein = Math.round(w * 1.8);
+  var fat = Math.round(w * 0.8);
+  var carbs = Math.round((calories - protein*4 - fat*9) / 4);
+
+  document.getElementById("result").innerText =
+    "Калории: " + Math.round(calories) + " ккал\n\n" +
+    "Белки: " + protein + " г\n\n" +
+    "Жиры: " + fat + " г\n" +
+    "— растительные: " + Math.round(fat * 0.65) + " г\n" +
+    "— животные: " + Math.round(fat * 0.35) + " г\n\n" +
+    "Углеводы: " + carbs + " г\n" +
+    "— медленные: " + Math.round(carbs * 0.65) + " г\n" +
+    "— быстрые: " + Math.round(carbs * 0.35) + " г";
+};
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
