@@ -5,39 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FitPro+</title>
   <style>
-    body { margin:0; font-family: Arial, sans-serif; background:#f9f9f9; color:#333; }
-    header { background:#4CAF50; color:#fff; text-align:center; padding:25px 15px; }
-    header h1 { margin:0; font-size:2rem; }
-    nav { display:flex; justify-content:center; flex-wrap:wrap; margin:20px 0; }
-    nav a { margin:5px 10px; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px; transition:0.2s; }
-    nav a:hover { background:#43a047; }
-    main { max-width:700px; margin:auto; padding:20px; text-align:center; }
-    @media (max-width: 600px) {
-      header h1 { font-size:1.5rem; }
-      nav a { padding:8px 15px; font-size:14px; }
-      main { padding:15px; }
+    body {
+      margin:0; font-family: Arial, sans-serif; background:#f9f9f9; color:#333;
+      scroll-behavior: smooth;
+    }
+    header {
+      position: fixed; top:0; left:0; width:100%;
+      background:#4CAF50; color:#fff; display:flex; justify-content:space-between; align-items:center;
+      padding:15px 30px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:1000;
+    }
+    header h1 { margin:0; font-size:1.8rem; }
+    nav a { margin-left:20px; color:white; text-decoration:none; font-weight:bold; transition:0.2s; }
+    nav a:hover { color:#e0e0e0; }
+    main { max-width:700px; margin:120px auto 50px auto; padding:0 15px; text-align:center; }
+    a.button { display:inline-block; margin:10px; padding:10px 20px; background:#4CAF50; color:white; border-radius:6px; text-decoration:none; transition:0.2s; }
+    a.button:hover { background:#43a047; }
+    @media (max-width:600px) {
+      header { flex-direction: column; align-items:flex-start; }
+      nav a { margin:5px 0 0 0; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>FitPro+</h1>
-    <p>Научный подход к питанию и тренировкам</p>
-  </header>
 
+<header>
+  <h1>FitPro+</h1>
   <nav>
     <a href="nutrition.html">🥗 Питание</a>
     <a href="strength.html">🏋️ Сила</a>
   </nav>
+</header>
 
-  <main>
-    <h2>Добро пожаловать в FitPro+</h2>
-    <p>FitPro+ объединяет науку о питании и силовые методики.  
-       Рассчитай калораж, БЖУ и узнай свой максимум в жиме лёжа!</p>
-    <p>
-      <a href="nutrition.html">Перейти к питанию</a> | 
-      <a href="strength.html">Перейти к тренировкам</a>
-    </p>
-  </main>
+<main>
+  <h2>Добро пожаловать в FitPro+</h2>
+  <p>FitPro+ объединяет науку о питании и силовые методики.  
+     Здесь ты можешь рассчитать калораж, БЖУ, а также узнать свой максимум в жиме лёжа!</p>
+  <p>
+    <a href="nutrition.html" class="button">Перейти к питанию</a>
+    <a href="strength.html" class="button">Перейти к тренировкам</a>
+  </p>
+</main>
+
 </body>
 </html>
+
+
