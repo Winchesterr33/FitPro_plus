@@ -1,40 +1,545 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ФитПро+</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FitPro+ — Твой фитнес-трекер</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 <style>
-body{margin:0;font-family:'Arial',sans-serif;background:#f0f4f8;color:#333;}
-header{position:fixed;top:0;width:100%;background:#1e88e5;color:white;display:flex;justify-content:space-between;align-items:center;padding:15px 30px;box-shadow:0 4px 10px rgba(0,0,0,0.2);z-index:1000;}
-header h1{margin:0;font-size:1.6rem;font-weight:bold;}
-nav a{margin-left:20px;color:white;text-decoration:none;font-weight:600;padding:8px 15px;border-radius:5px;transition:0.3s;}
-nav a:hover{background: rgba(255,255,255,0.2);}
-main{max-width:750px;margin:140px auto 50px auto;padding:0 15px;display:flex;flex-direction:column;gap:20px;}
-.card{background:white;padding:30px 20px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.1);transition:0.3s;display:flex;flex-direction:column;align-items:center;}
-.card:hover{box-shadow:0 12px 30px rgba(0,0,0,0.15);}
-.card h2{color:#0d47a1;margin-bottom:15px;}
-.button{display:inline-block;margin:10px;padding:12px 25px;background:linear-gradient(90deg,#1e88e5,#1565c0);color:white;border-radius:10px;text-decoration:none;font-weight:bold;transition:0.3s;}
-.button:hover{background:linear-gradient(90deg,#1565c0,#1e88e5);}
-@media(max-width:600px){header{flex-direction:column;align-items:flex-start;padding:10px 20px;}header h1{font-size:1.4rem;margin-bottom:8px;}nav a{margin-left:0;margin-top:6px;}main{margin-top:160px;}}
+  :root {
+    --bg: #080b0f;
+    --bg2: #0e1318;
+    --bg3: #141c24;
+    --accent: #c8ff00;
+    --accent2: #00e5ff;
+    --text: #f0f4f8;
+    --muted: #6b7a8d;
+    --border: rgba(200,255,0,0.12);
+    --card: rgba(20,28,36,0.8);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: none;
+  }
+  /* Custom cursor */
+  .cursor {
+    position: fixed; width: 12px; height: 12px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform .1s;
+    mix-blend-mode: difference;
+  }
+  .cursor-follower {
+    position: fixed; width: 36px; height: 36px;
+    border: 1.5px solid var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: all .25s cubic-bezier(.23,1,.32,1);
+    opacity: .5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(8,11,15,.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; letter-spacing: 2px;
+    color: var(--accent);
+  }
+  .logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 14px;
+    font-weight: 500; letter-spacing: .05em; text-transform: uppercase;
+    transition: color .3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px; background: var(--accent);
+    transition: width .3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-btn {
+    background: var(--accent); color: var(--bg);
+    border: none; padding: 10px 24px; font-family: 'DM Sans', sans-serif;
+    font-weight: 700; font-size: 13px; letter-spacing: .08em;
+    text-transform: uppercase; cursor: none; border-radius: 2px;
+    transition: all .3s; text-decoration: none;
+  }
+  .nav-btn:hover { background: #d4ff33; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 120px 60px 80px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 70% 40%, rgba(200,255,0,.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 70%, rgba(0,229,255,.04) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: .04;
+    background-image: linear-gradient(var(--accent) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content {
+    position: relative; max-width: 700px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(200,255,0,.08); border: 1px solid rgba(200,255,0,.2);
+    border-radius: 100px; padding: 6px 16px;
+    font-size: 12px; font-weight: 500; color: var(--accent);
+    letter-spacing: .08em; text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 130px);
+    line-height: .92; letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+  h1 .accent { color: var(--accent); }
+  h1 .outline {
+    -webkit-text-stroke: 1px rgba(240,244,248,.4);
+    color: transparent;
+  }
+  .hero-desc {
+    font-size: 17px; color: var(--muted); line-height: 1.7;
+    max-width: 480px; margin-bottom: 48px; font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: var(--bg);
+    padding: 16px 36px; font-family: 'DM Sans', sans-serif;
+    font-weight: 700; font-size: 14px; letter-spacing: .08em;
+    text-transform: uppercase; text-decoration: none;
+    border-radius: 2px; transition: all .3s;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-primary:hover { background: #d4ff33; transform: translateY(-2px); box-shadow: 0 20px 40px rgba(200,255,0,.2); }
+  .btn-secondary {
+    border: 1px solid rgba(240,244,248,.15); color: var(--text);
+    padding: 16px 36px; font-family: 'DM Sans', sans-serif;
+    font-weight: 500; font-size: 14px; letter-spacing: .08em;
+    text-transform: uppercase; text-decoration: none;
+    border-radius: 2px; transition: all .3s;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* STATS */
+  .stats-bar {
+    position: relative;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .stat-item {
+    padding: 36px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px; color: var(--accent); line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+  /* BMI CALCULATOR - new feature on homepage */
+  .bmi-section {
+    padding: 100px 60px;
+    background: var(--bg2);
+    position: relative;
+  }
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 1; margin-bottom: 16px;
+  }
+  .section-desc { font-size: 16px; color: var(--muted); max-width: 500px; line-height: 1.7; margin-bottom: 60px; }
+
+  .bmi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  .bmi-form { display: flex; flex-direction: column; gap: 20px; }
+  .input-group { display: flex; flex-direction: column; gap: 8px; }
+  .input-group label { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  input[type="number"], select {
+    background: var(--bg3); border: 1px solid rgba(255,255,255,.06);
+    color: var(--text); padding: 14px 18px; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; border-radius: 4px; outline: none;
+    transition: border-color .3s; width: 100%;
+    -webkit-appearance: none;
+  }
+  input[type="number"]:focus, select:focus { border-color: var(--accent); }
+  select option { background: var(--bg3); }
+  .calc-btn {
+    background: var(--accent); color: var(--bg); border: none;
+    padding: 16px; font-family: 'DM Sans', sans-serif;
+    font-weight: 700; font-size: 14px; letter-spacing: .1em;
+    text-transform: uppercase; cursor: none; border-radius: 4px;
+    transition: all .3s; margin-top: 8px;
+  }
+  .calc-btn:hover { background: #d4ff33; transform: translateY(-1px); }
+
+  .bmi-result {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 40px;
+    display: none; flex-direction: column; gap: 24px;
+  }
+  .bmi-result.show { display: flex; animation: fadeUp .4s ease; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  .bmi-value-display { text-align: center; }
+  .bmi-big-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 90px; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .bmi-category {
+    font-size: 14px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; padding: 6px 20px;
+    border-radius: 100px; display: inline-block; margin-top: 8px;
+  }
+  .bmi-scale {
+    position: relative; height: 8px;
+    background: linear-gradient(90deg, #00e5ff 0%, #c8ff00 35%, #ffaa00 65%, #ff3d3d 100%);
+    border-radius: 4px;
+  }
+  .bmi-pointer {
+    position: absolute; top: -6px;
+    width: 20px; height: 20px;
+    background: var(--text); border-radius: 50%;
+    border: 3px solid var(--bg); transform: translateX(-50%);
+    transition: left .6s cubic-bezier(.23,1,.32,1);
+  }
+  .bmi-tips { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* FEATURES */
+  .features-section { padding: 100px 60px; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 60px; }
+  .feature-card {
+    background: var(--bg2); padding: 48px 40px;
+    border: 1px solid transparent;
+    transition: all .4s; position: relative; overflow: hidden;
+    text-decoration: none; color: var(--text);
+    display: block;
+  }
+  .feature-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(200,255,0,.03) 0%, transparent 60%);
+    opacity: 0; transition: opacity .4s;
+  }
+  .feature-card:hover { border-color: rgba(200,255,0,.2); transform: translateY(-4px); }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon {
+    font-size: 36px; margin-bottom: 24px; display: block;
+    filter: grayscale(1) brightness(1.5);
+    transition: filter .3s;
+  }
+  .feature-card:hover .feature-icon { filter: none; }
+  .feature-num {
+    position: absolute; top: 32px; right: 32px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 72px;
+    color: rgba(255,255,255,.04); line-height: 1;
+  }
+  .feature-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 32px;
+    letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .feature-arrow {
+    margin-top: 32px; font-size: 13px; color: var(--accent);
+    font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: gap .3s;
+  }
+  .feature-card:hover .feature-arrow { gap: 16px; }
+
+  /* MARQUEE */
+  .marquee-section {
+    padding: 32px 0; overflow: hidden;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    background: var(--accent);
+  }
+  .marquee-track {
+    display: flex; gap: 0; animation: marquee 20s linear infinite;
+    width: max-content;
+  }
+  @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif; font-size: 20px;
+    letter-spacing: 3px; color: var(--bg); padding: 0 32px;
+    white-space: nowrap;
+  }
+  .marquee-dot { color: rgba(0,0,0,.3); }
+
+  /* FOOTER */
+  footer {
+    padding: 60px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--accent); }
+  .footer-text { font-size: 13px; color: var(--muted); }
+
+  /* ANIMATIONS */
+  .reveal { opacity: 0; transform: translateY(30px); transition: all .7s cubic-bezier(.23,1,.32,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .hero, .bmi-section, .features-section { padding: 80px 24px; }
+    .stats-bar { grid-template-columns: repeat(2,1fr); }
+    .stat-item { border-right: 1px solid var(--border); }
+    .bmi-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    footer { padding: 40px 24px; flex-direction: column; gap: 16px; text-align: center; }
+    .nav-links { display: none; }
+  }
 </style>
 </head>
 <body>
-<header>
-<h1>ФитПро+</h1>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="follower"></div>
+
 <nav>
-<a href="nutrition.html">🥗 Составить индивидуальный план питания</a>
-<a href="strength.html">🏋️ Силомер</a>
+  <div class="logo">Fit<span>Pro</span>+</div>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="nutrition.html">Питание</a></li>
+    <li><a href="strength.html">Сила</a></li>
+    <li><a href="#bmi">ИМТ</a></li>
+  </ul>
+  <a href="nutrition.html" class="nav-btn">Начать →</a>
 </nav>
-</header>
-<main>
-<div class="card">
-<h2>Добро пожаловать в ФитПро+</h2>
-<p>Данный сервис находится в разработке, на данный момент доступно всего 2 функции. Приятного использования!</p>
-<a href="nutrition.html" class="button">🥗 Составить индивидуальный план питания</a>
-<a href="strength.html" class="button">🏋️ Силомер</a>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> Beta v2.0 — Новый дизайн</div>
+    <h1>
+      СТАНЬ<br>
+      <span class="accent">СИЛЬНЕЕ</span><br>
+      <span class="outline">УМНЕЕ</span>
+    </h1>
+    <p class="hero-desc">Персональные расчёты для твоего тела. Калории, макросы, максимальный вес — всё в одном месте.</p>
+    <div class="hero-actions">
+      <a href="nutrition.html" class="btn-primary">Рассчитать питание →</a>
+      <a href="strength.html" class="btn-secondary">Силомер ↗</a>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat-item reveal"><div class="stat-num" data-target="3">0</div><div class="stat-label">Инструмента</div></div>
+  <div class="stat-item reveal"><div class="stat-num" data-target="12">0</div><div class="stat-label">Упражнений в силомере</div></div>
+  <div class="stat-item reveal"><div class="stat-num" data-target="5">0</div><div class="stat-label">Уровней активности</div></div>
+  <div class="stat-item reveal"><div class="stat-num" data-target="100">0</div><div class="stat-label">% Бесплатно</div></div>
 </div>
-</main>
+
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">ПИТАНИЕ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">СИЛА <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">ИМТ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">КАЛОРИИ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">1ПМ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">МАКРОСЫ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">ЦЕЛИ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">ПРОГРЕСС <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">ПИТАНИЕ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">СИЛА <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">ИМТ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">КАЛОРИИ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">1ПМ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">МАКРОСЫ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">ЦЕЛИ <span class="marquee-dot">●</span></span>
+    <span class="marquee-item">ПРОГРЕСС <span class="marquee-dot">●</span></span>
+  </div>
+</div>
+
+<section class="bmi-section reveal" id="bmi">
+  <div class="section-label">▸ Быстрый расчёт</div>
+  <h2 class="section-title">КАЛЬКУЛЯТОР<br>ИМТ</h2>
+  <p class="section-desc">Узнай свой индекс массы тела за 5 секунд и получи персональную рекомендацию.</p>
+  <div class="bmi-grid">
+    <div class="bmi-form">
+      <div class="input-row">
+        <div class="input-group">
+          <label>Рост (см)</label>
+          <input type="number" id="bmi-height" placeholder="175" min="100" max="250"/>
+        </div>
+        <div class="input-group">
+          <label>Вес (кг)</label>
+          <input type="number" id="bmi-weight" placeholder="70" min="30" max="300"/>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Возраст</label>
+        <input type="number" id="bmi-age" placeholder="25" min="10" max="100"/>
+      </div>
+      <div class="input-group">
+        <label>Пол</label>
+        <select id="bmi-sex">
+          <option value="m">Мужской</option>
+          <option value="f">Женский</option>
+        </select>
+      </div>
+      <button class="calc-btn" onclick="calcBMI()">Рассчитать ИМТ →</button>
+    </div>
+    <div class="bmi-result" id="bmi-result">
+      <div class="bmi-value-display">
+        <div class="bmi-big-num" id="bmi-num">—</div>
+        <div>Индекс массы тела</div>
+        <span class="bmi-category" id="bmi-cat"></span>
+      </div>
+      <div>
+        <div style="margin-bottom:12px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Шкала ИМТ</div>
+        <div class="bmi-scale"><div class="bmi-pointer" id="bmi-pointer"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted)">
+          <span>Дефицит</span><span>Норма</span><span>Избыток</span><span>Ожирение</span>
+        </div>
+      </div>
+      <div class="bmi-tips" id="bmi-tips"></div>
+    </div>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="section-label reveal">▸ Инструменты</div>
+  <h2 class="section-title reveal">ЧТО<br>УМЕЕТ<br><span style="color:var(--accent)">FITPRO+</span></h2>
+  <div class="features-grid">
+    <a href="nutrition.html" class="feature-card reveal">
+      <span class="feature-num">01</span>
+      <span class="feature-icon">🥗</span>
+      <div class="feature-title">План питания</div>
+      <p class="feature-desc">Рассчитай норму калорий, белков, жиров и углеводов на основе твоих параметров и цели — похудение, набор или поддержание.</p>
+      <div class="feature-arrow">Открыть →</div>
+    </a>
+    <a href="strength.html" class="feature-card reveal">
+      <span class="feature-num">02</span>
+      <span class="feature-icon">🏋️</span>
+      <div class="feature-title">Силомер (1ПМ)</div>
+      <p class="feature-desc">Вычисли свой максимальный одноповторный максимум для любого упражнения. Жим, присед, тяга и ещё 9 упражнений.</p>
+      <div class="feature-arrow">Открыть →</div>
+    </a>
+    <a href="#bmi" class="feature-card reveal">
+      <span class="feature-num">03</span>
+      <span class="feature-icon">⚖️</span>
+      <div class="feature-title">Калькулятор ИМТ</div>
+      <p class="feature-desc">Мгновенный расчёт индекса массы тела. Узнай свою категорию и получи персональные советы прямо на главной странице.</p>
+      <div class="feature-arrow">Рассчитать ↑</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">FitPro+</div>
+  <div class="footer-text">Разработано с 💚 для твоего прогресса</div>
+  <div class="footer-text">v2.0 Beta</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('follower');
+  let mx=0,my=0,fx=0,fy=0;
+  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
+  function animFollower(){ fx+=(mx-fx)*.12; fy+=(my-fy)*.12; follower.style.left=fx+'px'; follower.style.top=fy+'px'; requestAnimationFrame(animFollower); }
+  animFollower();
+  document.querySelectorAll('a,button,.calc-btn').forEach(el => {
+    el.addEventListener('mouseenter', ()=>{ cursor.style.transform='translate(-50%,-50%) scale(2)'; follower.style.transform='translate(-50%,-50%) scale(1.5)'; });
+    el.addEventListener('mouseleave', ()=>{ cursor.style.transform='translate(-50%,-50%) scale(1)'; follower.style.transform='translate(-50%,-50%) scale(1)'; });
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => { if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'), i*80); } });
+  }, { threshold: .1 });
+  revealEls.forEach(el => obs.observe(el));
+
+  // Counter animation
+  function animateCounters() {
+    document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+      const target = +el.dataset.target;
+      let current = 0;
+      const step = target / 40;
+      const t = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = Math.round(current);
+        if(current >= target) { el.textContent = target+'%' === el.textContent ? target+'%' : target; clearInterval(t); }
+      }, 30);
+    });
+  }
+  const statsObs = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting) { animateCounters(); statsObs.disconnect(); }
+  });
+  statsObs.observe(document.querySelector('.stats-bar'));
+
+  // BMI Calculator
+  function calcBMI() {
+    const h = +document.getElementById('bmi-height').value;
+    const w = +document.getElementById('bmi-weight').value;
+    const age = +document.getElementById('bmi-age').value;
+    const sex = document.getElementById('bmi-sex').value;
+    if(!h || !w) { alert('Введи рост и вес!'); return; }
+    const bmi = (w / ((h/100)**2)).toFixed(1);
+    const result = document.getElementById('bmi-result');
+    const numEl = document.getElementById('bmi-num');
+    const catEl = document.getElementById('bmi-cat');
+    const tipsEl = document.getElementById('bmi-tips');
+    const pointer = document.getElementById('bmi-pointer');
+
+    numEl.textContent = bmi;
+    result.classList.add('show');
+
+    let cat, color, tips, pct;
+    if(bmi < 18.5) {
+      cat='Дефицит массы'; color='#00e5ff'; tips='Тебе нужно увеличить калорийность. Фокус на белках и сложных углеводах. Рекомендуется консультация с врачом.'; pct=bmi/18.5*20;
+    } else if(bmi < 25) {
+      cat='Норма ✓'; color='var(--accent)'; tips='Отличный результат! Поддерживай текущий образ жизни. Следи за балансом макронутриентов.'; pct=20+(bmi-18.5)/(25-18.5)*35;
+    } else if(bmi < 30) {
+      cat='Избыточный вес'; color='#ffaa00'; tips='Небольшой дефицит калорий (300-500 ккал/день) + кардио 3-4 раза в неделю помогут вернуться к норме.'; pct=55+(bmi-25)/5*20;
+    } else {
+      cat='Ожирение'; color='#ff3d3d'; tips='Рекомендуется обратиться к врачу для составления плана снижения веса. Резкие диеты не эффективны.'; pct=Math.min(75+(bmi-30)/10*25, 95);
+    }
+    catEl.textContent = cat;
+    catEl.style.background = color+'22';
+    catEl.style.color = color;
+    catEl.style.border = '1px solid '+color+'44';
+    numEl.style.color = color;
+    tipsEl.textContent = tips;
+    setTimeout(() => pointer.style.left = pct+'%', 100);
+  }
+</script>
 </body>
 </html>
-
