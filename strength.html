@@ -1,95 +1,470 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ФитПро+ | Сила</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FitPro+ — Силомер</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 <style>
-body{margin:0;font-family:'Arial',sans-serif;background:#f0f4f8;color:#333;}
-header{position:fixed;top:0;width:100%;background:#1e88e5;color:white;display:flex;justify-content:space-between;align-items:center;padding:15px 30px;box-shadow:0 4px 10px rgba(0,0,0,0.2);z-index:1000;}
-header h1{margin:0;font-size:1.6rem;}
-nav a{margin-left:20px;color:white;text-decoration:none;font-weight:600;padding:8px 15px;border-radius:5px;transition:0.3s;}
-nav a:hover{background: rgba(255,255,255,0.2);}
-main{max-width:750px;margin:140px auto 50px auto;padding:0 15px;display:flex;flex-direction:column;gap:20px;}
-.card{background:white;padding:30px 20px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.1);}
-label{display:block;margin-top:10px;font-weight:600;}
-input,select{width:100%;padding:10px;margin-bottom:15px;border-radius:6px;border:1px solid #ccc;}
-button{width:100%;padding:12px;background:linear-gradient(90deg,#1e88e5,#1565c0);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;transition:0.3s;}
-button:hover{background:linear-gradient(90deg,#1565c0,#1e88e5);}
-.result{display:none;margin-top:20px;padding:20px;border-radius:10px;background:#e3f2fd;text-align:left;}
-table{width:100%;border-collapse:collapse;margin-top:10px;}
-th,td{border:1px solid #ccc;padding:8px;text-align:center;}
-th{background:#bbdefb;}
-@media(max-width:600px){header{flex-direction:column;align-items:flex-start;padding:10px 20px;}header h1{font-size:1.4rem;margin-bottom:8px;}nav a{margin-left:0;margin-top:6px;}main{margin-top:160px;}}
+  :root {
+    --bg: #080b0f; --bg2: #0e1318; --bg3: #141c24;
+    --accent: #c8ff00; --accent2: #00e5ff;
+    --text: #f0f4f8; --muted: #6b7a8d; --border: rgba(200,255,0,0.12);
+    --z1: #00e5ff; --z2: #c8ff00; --z3: #ffa94d; --z4: #ff6b6b; --z5: #ff3d3d;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(8,11,15,.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo { font-family: 'Bebas Neue'; font-size: 26px; letter-spacing: 2px; color: var(--accent); text-decoration: none; }
+  .logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; transition: color .3s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+  @media(max-width:768px){ nav{padding:14px 20px;} .nav-links{display:none;} }
+
+  .page-header {
+    padding: 80px 60px 60px;
+    background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .page-header::before {
+    content: 'СИЛА'; position: absolute; right: 20px; bottom: -30px;
+    font-family: 'Bebas Neue'; font-size: 220px; color: rgba(200,255,0,.025);
+    line-height: 1; pointer-events: none; letter-spacing: 8px;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(200,255,0,.08); border: 1px solid rgba(200,255,0,.2);
+    border-radius: 100px; padding: 5px 14px; font-size: 11px;
+    font-weight: 600; color: var(--accent); letter-spacing: .1em;
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  h1 { font-family: 'Bebas Neue'; font-size: clamp(52px,7vw,96px); line-height: .95; letter-spacing: 2px; }
+  h1 span { color: var(--accent); }
+  .page-header p { font-size: 16px; color: var(--muted); margin-top: 16px; max-width: 500px; line-height: 1.7; }
+
+  .main { padding: 60px; display: grid; grid-template-columns: 400px 1fr; gap: 40px; align-items: start; }
+  @media(max-width:1100px){ .main{grid-template-columns:1fr; padding:30px 20px;} }
+
+  .form-panel {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 36px;
+    position: sticky; top: 90px;
+  }
+  .panel-title { font-family: 'Bebas Neue'; font-size: 28px; letter-spacing: 1px; margin-bottom: 28px; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  input[type="number"], select {
+    width: 100%; background: var(--bg3); border: 1px solid rgba(255,255,255,.07);
+    color: var(--text); padding: 13px 16px; font-family: 'DM Sans'; font-size: 15px;
+    border-radius: 6px; outline: none; transition: border-color .3s;
+    -webkit-appearance: none;
+  }
+  input[type="number"]:focus, select:focus { border-color: rgba(200,255,0,.4); box-shadow: 0 0 0 3px rgba(200,255,0,.06); }
+  select option { background: var(--bg3); }
+
+  /* Exercise grid selector */
+  .exercise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ex-btn {
+    padding: 12px 10px; background: var(--bg3); border: 1px solid rgba(255,255,255,.06);
+    color: var(--muted); font-family: 'DM Sans'; font-size: 12px; font-weight: 600;
+    border-radius: 6px; cursor: pointer; transition: all .25s; text-align: center;
+    line-height: 1.3;
+  }
+  .ex-btn.active { background: rgba(200,255,0,.1); border-color: rgba(200,255,0,.3); color: var(--accent); }
+  .ex-btn:hover { border-color: rgba(200,255,0,.2); color: var(--text); }
+  .ex-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .submit-btn {
+    width: 100%; background: var(--accent); color: var(--bg);
+    border: none; padding: 18px; font-family: 'DM Sans'; font-weight: 700;
+    font-size: 15px; letter-spacing: .08em; text-transform: uppercase;
+    cursor: pointer; border-radius: 8px; transition: all .3s; margin-top: 8px;
+  }
+  .submit-btn:hover { background: #d4ff33; transform: translateY(-1px); box-shadow: 0 12px 30px rgba(200,255,0,.2); }
+
+  .results-panel { display: none; flex-direction: column; gap: 24px; animation: fadeUp .5s ease; }
+  .results-panel.show { display: flex; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 80px 40px; text-align: center; gap: 16px;
+    border: 1px dashed rgba(255,255,255,.06); border-radius: 12px;
+  }
+  .empty-state .icon { font-size: 56px; filter: grayscale(1); opacity: .4; }
+  .empty-state p { color: var(--muted); font-size: 15px; }
+
+  /* 1RM hero */
+  .orm-hero {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 48px;
+    display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
+  }
+  .orm-label { font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .orm-exercise { font-size: 16px; color: var(--muted); margin-bottom: 4px; }
+  .orm-value { font-family: 'Bebas Neue'; font-size: 100px; line-height: 1; color: var(--accent); margin-bottom: 0; }
+  .orm-unit { font-family: 'Bebas Neue'; font-size: 28px; color: var(--muted); }
+  .orm-formula { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  /* Level badge */
+  .level-badge {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    text-align: center;
+  }
+  .level-circle {
+    width: 90px; height: 90px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; border: 3px solid;
+  }
+  .level-name { font-family: 'Bebas Neue'; font-size: 16px; letter-spacing: 1px; }
+
+  /* Training zones */
+  .zones-title { font-family: 'Bebas Neue'; font-size: 28px; letter-spacing: 1px; margin-bottom: 16px; }
+  .zones-list { display: flex; flex-direction: column; gap: 10px; }
+  .zone-row {
+    background: var(--bg2); border: 1px solid rgba(255,255,255,.05);
+    border-radius: 8px; padding: 18px 20px;
+    display: grid; grid-template-columns: 200px 1fr auto;
+    align-items: center; gap: 16px;
+    transition: transform .3s;
+  }
+  .zone-row:hover { transform: translateX(4px); }
+  .zone-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .zone-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .zone-desc { font-size: 12px; color: var(--muted); }
+  .zone-vals { text-align: right; }
+  .zone-pct { font-family: 'Bebas Neue'; font-size: 22px; line-height: 1; }
+  .zone-kg { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .zone-bar-wrap { height: 4px; background: rgba(255,255,255,.06); border-radius: 2px; margin-top: 10px; grid-column: 1/-1; }
+  .zone-bar { height: 4px; border-radius: 2px; width: 0; transition: width 1s cubic-bezier(.23,1,.32,1); }
+
+  /* Rep table */
+  .rep-table-wrap { overflow-x: auto; }
+  .rep-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  .rep-table thead th {
+    text-align: left; padding: 12px 16px;
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .rep-table tbody tr { border-bottom: 1px solid rgba(255,255,255,.04); transition: background .2s; }
+  .rep-table tbody tr:hover { background: rgba(200,255,0,.03); }
+  .rep-table td { padding: 12px 16px; }
+  .rep-table .highlight { background: rgba(200,255,0,.06); }
+  .rep-table .rm-num { font-family: 'Bebas Neue'; font-size: 18px; color: var(--accent); }
+  .rep-table .kg-val { font-weight: 600; }
+
+  /* Tips grid */
+  .tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tip-item {
+    background: var(--bg2); border: 1px solid rgba(255,255,255,.05);
+    border-radius: 8px; padding: 16px; font-size: 13px; color: var(--muted); line-height: 1.6;
+    display: flex; gap: 10px;
+  }
+  .tip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px; }
 </style>
 </head>
 <body>
-<header>
-<h1>FitPro+</h1>
+
 <nav>
-<a href="index.html">🏠 Главная</a>
-<a href="nutrition.html">🥗 Питание</a>
+  <a href="index.html" class="logo">Fit<span>Pro</span>+</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="nutrition.html">Питание</a></li>
+    <li><a href="strength.html" class="active">Сила</a></li>
+  </ul>
 </nav>
-</header>
-<main>
-<h2>Калькулятор максимального 1ПМ</h2>
-<div class="card">
-<form id="strengthForm">
-<label>Выберите упражнение:</label>
-<select id="exercise">
-  <option value="bench">Жим лёжа</option>
-  <option value="deadlift">Становая тяга</option>
-  <option value="squat">Присед со штангой</option>
-</select>
-<label>Вес штанги (кг):</label>
-<input type="number" id="weight" required>
-<label>Количество повторений:</label>
-<input type="number" id="reps" required>
-<button type="submit">Рассчитать</button>
-</form>
-<div class="result" id="result"></div>
+
+<div class="page-header">
+  <div class="badge">🏋️ Калькулятор силы</div>
+  <h1>СИЛОМЕР<br><span>1ПМ</span></h1>
+  <p>Рассчитай свой одноповторный максимум и узнай зоны нагрузок для любого упражнения.</p>
+</div>
+
+<div class="main">
+
+  <div class="form-panel">
+    <div class="panel-title">Параметры</div>
+
+    <div class="form-group">
+      <label>Упражнение</label>
+      <div class="exercise-grid" id="ex-grid">
+        <button class="ex-btn active" data-ex="Жим лёжа" onclick="selEx(this)"><span class="ex-icon">🛋️</span>Жим лёжа</button>
+        <button class="ex-btn" data-ex="Присед со штангой" onclick="selEx(this)"><span class="ex-icon">🏋️</span>Присед</button>
+        <button class="ex-btn" data-ex="Становая тяга" onclick="selEx(this)"><span class="ex-icon">💪</span>Становая</button>
+        <button class="ex-btn" data-ex="Жим стоя" onclick="selEx(this)"><span class="ex-icon">⬆️</span>Жим стоя</button>
+        <button class="ex-btn" data-ex="Тяга штанги в наклоне" onclick="selEx(this)"><span class="ex-icon">🔄</span>Тяга в накл.</button>
+        <button class="ex-btn" data-ex="Подъём на бицепс" onclick="selEx(this)"><span class="ex-icon">💪</span>Бицепс</button>
+        <button class="ex-btn" data-ex="Жим узким хватом" onclick="selEx(this)"><span class="ex-icon">🤜</span>Жим узкий</button>
+        <button class="ex-btn" data-ex="Болгарский присед" onclick="selEx(this)"><span class="ex-icon">🦵</span>Болг. присед</button>
+        <button class="ex-btn" data-ex="Румынская тяга" onclick="selEx(this)"><span class="ex-icon">🔃</span>Рум. тяга</button>
+        <button class="ex-btn" data-ex="Жим гантелей лёжа" onclick="selEx(this)"><span class="ex-icon">🏅</span>Жим гантелей</button>
+        <button class="ex-btn" data-ex="Гакк-приседания" onclick="selEx(this)"><span class="ex-icon">🦵</span>Гакк-присед</button>
+        <button class="ex-btn" data-ex="Тяга верхнего блока" onclick="selEx(this)"><span class="ex-icon">⬇️</span>Верхний блок</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Вес и повторения</label>
+      <div class="form-row">
+        <input type="number" id="orm-weight" placeholder="Вес (кг)" min="1" max="500"/>
+        <input type="number" id="orm-reps" placeholder="Повторений" min="1" max="30"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Формула расчёта</label>
+      <select id="formula">
+        <option value="epley">Эпли (самая популярная)</option>
+        <option value="brzycki">Брзицки</option>
+        <option value="lander">Лэндер</option>
+        <option value="lombardi">Ломбарди</option>
+        <option value="avg">Среднее по 4 формулам</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Твой пол (для оценки уровня)</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--bg3);border-radius:8px;padding:4px">
+        <button class="toggle-btn active" id="sb-m" onclick="setSex('m')" style="padding:10px;border:none;background:var(--accent);color:var(--bg);font-family:'DM Sans';font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;transition:all .25s">♂ Мужской</button>
+        <button class="toggle-btn" id="sb-f" onclick="setSex('f')" style="padding:10px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans';font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;transition:all .25s">♀ Женский</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Вес тела (кг)</label>
+      <input type="number" id="body-weight" placeholder="Вес тела для оценки" min="30" max="300"/>
+    </div>
+
+    <button class="submit-btn" onclick="calcORM()">Рассчитать →</button>
+  </div>
+
+  <div>
+    <div class="empty-state" id="empty">
+      <div class="icon">🏋️</div>
+      <p>Выбери упражнение, введи<br>вес и повторения слева</p>
+    </div>
+
+    <div class="results-panel" id="results">
+
+      <div class="orm-hero">
+        <div>
+          <div class="orm-label">Одноповторный максимум</div>
+          <div class="orm-exercise" id="orm-ex-name">Жим лёжа</div>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <div class="orm-value" id="orm-main">0</div>
+            <div class="orm-unit">КГ</div>
+          </div>
+          <div class="orm-formula" id="orm-form-label"></div>
+        </div>
+        <div class="level-badge">
+          <div class="level-circle" id="level-circle">🏅</div>
+          <div class="level-name" id="level-name">—</div>
+          <div style="font-size:11px;color:var(--muted)" id="level-ratio"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="zones-title">Зоны тренировочной нагрузки</div>
+        <div class="zones-list" id="zones-list"></div>
+      </div>
+
+      <div>
+        <div class="zones-title">Таблица повторений → вес</div>
+        <div class="rep-table-wrap">
+          <table class="rep-table">
+            <thead>
+              <tr>
+                <th>Повторений</th>
+                <th>% от 1ПМ</th>
+                <th>Вес (кг)</th>
+                <th>Зона</th>
+              </tr>
+            </thead>
+            <tbody id="rep-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div class="zones-title">Советы по силовым тренировкам</div>
+        <div class="tips-grid" id="tips-grid"></div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <script>
-document.getElementById('strengthForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    const exercise = document.getElementById('exercise').value;
-    const weight = +document.getElementById('weight').value;
-    const reps = +document.getElementById('reps').value;
-    if(!weight || !reps || reps<1) return;
+let selectedEx = 'Жим лёжа';
+let sex = 'm';
 
-    // Разные коэффициенты для разных упражнений
-    let k;
-    switch(exercise){
-        case 'bench': k=0.0333; break;
-        case 'deadlift': k=0.03; break;
-        case 'squat': k=0.032; break;
+function selEx(btn){
+  document.querySelectorAll('.ex-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedEx = btn.dataset.ex;
+}
+function setSex(s){
+  sex = s;
+  const bm=document.getElementById('sb-m'), bf=document.getElementById('sb-f');
+  bm.style.background = s==='m' ? 'var(--accent)' : 'transparent';
+  bm.style.color = s==='m' ? 'var(--bg)' : 'var(--muted)';
+  bf.style.background = s==='f' ? 'var(--accent)' : 'transparent';
+  bf.style.color = s==='f' ? 'var(--bg)' : 'var(--muted)';
+}
+
+function calcORM(){
+  const w = +document.getElementById('orm-weight').value;
+  const r = +document.getElementById('orm-reps').value;
+  const bw = +document.getElementById('body-weight').value;
+  const formula = document.getElementById('formula').value;
+
+  if(!w||!r){ alert('Введи вес и количество повторений!'); return; }
+
+  // 1RM formulas
+  const epley  = r===1 ? w : w*(1 + r/30);
+  const brzycki = r===1 ? w : w*(36/(37-r));
+  const lander  = r===1 ? w : 100*w/(101.3-2.67123*r);
+  const lombardi= w * Math.pow(r,0.1);
+
+  let orm;
+  if(formula==='epley') orm=epley;
+  else if(formula==='brzycki') orm=brzycki;
+  else if(formula==='lander') orm=lander;
+  else if(formula==='lombardi') orm=lombardi;
+  else orm=(epley+brzycki+lander+lombardi)/4;
+
+  orm = Math.round(orm*10)/10;
+
+  // Show results
+  document.getElementById('empty').style.display='none';
+  document.getElementById('results').classList.add('show');
+
+  document.getElementById('orm-ex-name').textContent = selectedEx;
+  animNum('orm-main', orm);
+
+  const labels = {epley:'Формула Эпли', brzycki:'Формула Брзицки', lander:'Формула Лэндер', lombardi:'Формула Ломбарди', avg:'Среднее по 4 формулам'};
+  document.getElementById('orm-form-label').textContent = labels[formula];
+
+  // Level assessment
+  if(bw){
+    const ratio = orm/bw;
+    // Rough standards for bench press (male). Adjust by exercise roughly.
+    let stdMale, stdFemale;
+    if(selectedEx==='Присед со штангой'||selectedEx==='Болгарский присед'||selectedEx==='Гакк-приседания'){
+      stdMale=[0.75,1.25,1.75,2.25]; stdFemale=[0.5,0.85,1.2,1.6];
+    } else if(selectedEx==='Становая тяга'||selectedEx==='Румынская тяга'){
+      stdMale=[1.0,1.5,2.0,2.5]; stdFemale=[0.7,1.0,1.4,1.8];
+    } else {
+      stdMale=[0.5,0.75,1.0,1.5]; stdFemale=[0.35,0.5,0.75,1.0];
     }
+    const std = sex==='m' ? stdMale : stdFemale;
+    let level, color, emoji;
+    if(ratio < std[0]){ level='Новичок'; color='#6b7a8d'; emoji='🌱'; }
+    else if(ratio < std[1]){ level='Начинающий'; color='#00e5ff'; emoji='💪'; }
+    else if(ratio < std[2]){ level='Средний'; color='#c8ff00'; emoji='⚡'; }
+    else if(ratio < std[3]){ level='Продвинутый'; color='#ffa94d'; emoji='🔥'; }
+    else { level='Элита'; color='#ff6b6b'; emoji='🏆'; }
 
-    // Формулы 1ПМ
-    const epley = weight*(1 + k*reps);
-    const brzycki = weight*36/(37-reps);
-    const lombardi = weight*Math.pow(reps,0.10);
-    const mayhew = 100*weight/(52.2+41.9*Math.exp(-0.055*reps));
-    const oconner = weight*(1+0.025*reps);
-    const avg = (epley+brzycki+lombardi+mayhew+oconner)/5;
+    const lc = document.getElementById('level-circle');
+    lc.textContent = emoji;
+    lc.style.borderColor = color;
+    lc.style.background = color+'18';
+    document.getElementById('level-name').textContent = level;
+    document.getElementById('level-name').style.color = color;
+    document.getElementById('level-ratio').textContent = (ratio).toFixed(2)+'× вес тела';
+  }
 
-    const exerciseName = exercise==='bench'?'Жим лёжа':exercise==='deadlift'?'Становая тяга':'Присед со штангой';
+  // Training zones
+  const zones = [
+    {name:'Максимальная сила', pct:100, color:'var(--z5)', desc:'1 повторение / тест', reps:'1 повт.'},
+    {name:'Взрывная сила', pct:90, color:'var(--z4)', desc:'2-3 повтора, силовые блоки', reps:'2-3 повт.'},
+    {name:'Сила + масса', pct:80, color:'var(--z3)', desc:'4-6 повторений, гипертрофия', reps:'4-6 повт.'},
+    {name:'Гипертрофия', pct:70, color:'var(--z2)', desc:'8-12 повторений, объём', reps:'8-12 повт.'},
+    {name:'Силовая выносливость', pct:60, color:'var(--z1)', desc:'15-20 повторений, тонус', reps:'15-20 повт.'},
+  ];
 
-    const resDiv = document.getElementById('result');
-    resDiv.style.display='block';
-    resDiv.innerHTML = `
-      <p><strong>${exerciseName} — Средний 1ПМ:</strong> ${avg.toFixed(1)} кг</p>
-      <table>
-        <tr><th>Формула</th><th>Результат (кг)</th></tr>
-        <tr><td>Эпли</td><td>${epley.toFixed(1)}</td></tr>
-        <tr><td>Бржицки</td><td>${brzycki.toFixed(1)}</td></tr>
-        <tr><td>Ломбарди</td><td>${lombardi.toFixed(1)}</td></tr>
-        <tr><td>Мэйхью</td><td>${mayhew.toFixed(1)}</td></tr>
-        <tr><td>О’Коннор</td><td>${oconner.toFixed(1)}</td></tr>
-      </table>
-    `;
-});
+  document.getElementById('zones-list').innerHTML = zones.map(z => {
+    const kg = (orm * z.pct/100).toFixed(1);
+    const barW = z.pct;
+    return `
+      <div class="zone-row">
+        <div class="zone-name"><div class="zone-dot" style="background:${z.color}"></div>${z.name}</div>
+        <div class="zone-desc">${z.desc}</div>
+        <div class="zone-vals">
+          <div class="zone-pct" style="color:${z.color}">${z.pct}%</div>
+          <div class="zone-kg">${kg} кг · ${z.reps}</div>
+        </div>
+        <div class="zone-bar-wrap">
+          <div class="zone-bar" style="background:${z.color};width:0" data-w="${barW}"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  setTimeout(()=>{
+    document.querySelectorAll('.zone-bar').forEach(b => { b.style.width = b.dataset.w + '%'; });
+  }, 100);
+
+  // Rep table
+  const repData = [
+    {r:1,p:100},{r:2,p:95},{r:3,p:90},{r:4,p:88},{r:5,p:85},
+    {r:6,p:83},{r:7,p:80},{r:8,p:77},{r:10,p:74},{r:12,p:70},
+    {r:15,p:65},{r:20,p:60},
+  ];
+  const zoneNames = (p) => {
+    if(p>=90) return '<span style="color:var(--z5)">Макс. сила</span>';
+    if(p>=80) return '<span style="color:var(--z4)">Взрывная</span>';
+    if(p>=70) return '<span style="color:var(--z3)">Сила+масса</span>';
+    if(p>=60) return '<span style="color:var(--z2)">Гипертрофия</span>';
+    return '<span style="color:var(--z1)">Выносливость</span>';
+  };
+  document.getElementById('rep-tbody').innerHTML = repData.map(d => {
+    const kg = (orm*d.p/100).toFixed(1);
+    const isHighlight = d.r===r;
+    return `<tr class="${isHighlight?'highlight':''}">
+      <td><span class="rm-num">${d.r}ПМ</span></td>
+      <td>${d.p}%</td>
+      <td class="kg-val">${kg} кг</td>
+      <td>${zoneNames(d.p)}</td>
+    </tr>`;
+  }).join('');
+
+  // Tips by exercise
+  const tips = {
+    default:['Разминочные подходы обязательны (50%, 70%, 90% от рабочего веса)','Прогрессия нагрузки — основа роста силы. Добавляй 2.5кг каждую неделю','Полный отдых 3-5 мин между рабочими подходами','Техника важнее веса — травма обнулит весь прогресс'],
+    'Жим лёжа':['Сводка лопаток — ключ к жиму. Не пренебрегай','Ширина хвата — чуть шире плеч для максимального результата','Опускай штангу на нижнюю часть груди','Не отбивай штангу от груди — контролируй движение'],
+    'Становая тяга':['Нейтральная спина на протяжении всего движения!','Штанга близко к голеням — не отводи её далеко','Тяни бёдрами, не спиной','Пояс при рабочих весах >80% от 1ПМ'],
+    'Присед со штангой':['Колени в линию со стопами, не внутрь','Глубина — хотя бы до параллели','Взгляд вперёд-вверх, не вниз','Пятки на полу на протяжении всего движения'],
+  };
+  const exTips = tips[selectedEx] || tips.default;
+  document.getElementById('tips-grid').innerHTML = exTips.map(t=>`<div class="tip-item"><div class="tip-dot"></div>${t}</div>`).join('');
+}
+
+function animNum(id, target){
+  const el = document.getElementById(id);
+  let cur = 0;
+  const step = target/40;
+  const t = setInterval(()=>{
+    cur = Math.min(cur+step, target);
+    el.textContent = Math.round(cur*10)/10;
+    if(cur>=target){ el.textContent=target; clearInterval(t); }
+  },30);
+}
 </script>
 </body>
 </html>
